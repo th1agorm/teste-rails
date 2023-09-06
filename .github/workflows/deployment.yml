@@ -9,6 +9,8 @@ on:
   push:
     branches:
       - dev
+env:
+  HEROKU_APP_NAME: teste-actions
 
 jobs:
   heroku-deploy:
@@ -17,9 +19,6 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v4
     - name: Deploy to Heroku
-      if: github.ref == 'refs/heads/main'
-      env:
-        HEROKU_APP_NAME: teste-actions
       if: github.ref == 'refs/heads/dev'
       env:
         HEROKU_APP_NAME: teste-actions-dev
