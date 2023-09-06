@@ -1,7 +1,7 @@
 name: Push Container to Heroku
 
 on:
-  pull_request_target:
+  pull_request:
     types: [closed]
     branches: 
       - main
@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - dev
+      - main
 env:
   HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_STAGING }}
 
