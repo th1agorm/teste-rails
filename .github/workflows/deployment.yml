@@ -1,9 +1,9 @@
 name: Push Container to Heroku
 
 on:
-  pull_request:
+  pull_request_target:
     types: [closed]
-    branches:
+    branches: 
       - main
       - dev
   push:
