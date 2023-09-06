@@ -37,6 +37,7 @@ jobs:
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
   send-slack-message:
     needs: [heroku-deploy-main, heroku-deploy-dev]
+    if: needs.heroku-deploy-main.result == 'success' || needs.heroku-deploy-dev.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Post to a Slack channel
