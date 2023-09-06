@@ -6,6 +6,6 @@ app.get("/",(request, response, next) =>{
     response.send("Hello World");
 });
 
-app.listen(5000, ()=>{
+app.listen(process.env.PORT, ()=>{
     console.log("Server Working");
 })
