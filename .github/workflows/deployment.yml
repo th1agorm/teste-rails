@@ -11,33 +11,28 @@ on:
       - dev
 
 jobs:
-  heroku-deploy-main:
-    if: github.ref == 'refs/heads/main'
+  heroku-deploy:
     runs-on: ubuntu-latest
+    env: 
+      HEROKU_APP_NAME: ''
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
+    - name: Check enviroment to deploy
+      run: |
+        if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          $HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_STAGING }}"
+        else
+          $HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_DEV }}"
+        fi
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.14
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_STAGING }}
-        heroku_email: ${{ secrets.HEROKU_EMAIL }}
-  heroku-deploy-dev:
-    if: github.ref == 'refs/heads/dev'
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v4
-    - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.14
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_DEV }}
+        heroku_app_name: ${{ env.HEROKU_APP_NAME }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
   send-slack-message:
-    needs: [heroku-deploy-main, heroku-deploy-dev]
-    if: needs.heroku-deploy-main.result == 'success' || needs.heroku-deploy-dev.result == 'success'
+    needs: [heroku-deploy]
     runs-on: ubuntu-latest
     steps:
       - name: Post to a Slack channel
