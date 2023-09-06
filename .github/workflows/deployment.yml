@@ -19,9 +19,9 @@ jobs:
     - name: Check enviroment to deploy
       run: |
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-          export HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_STAGING }}"
+          export HEROKU_APP_NAME="${{ secrets.HEROKU_APP_NAME_STAGING }}"
         else
-          export HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_DEV }}"
+          export HEROKU_APP_NAME="${{ secrets.HEROKU_APP_NAME_DEV }}"
         fi
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.14
