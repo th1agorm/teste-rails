@@ -44,6 +44,7 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
   heroku-deploy-dev:
+    if: env.is-auto-commit == false && github.event_name != 'pull_request_target'
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
