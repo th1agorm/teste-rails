@@ -3,7 +3,15 @@ name: Push Container to Heroku
 on: [push]
 
 jobs:
+  check-app:
+    - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: npm ci
+      - run: npm run start
   heroku-deploy:
+    if: success()
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
