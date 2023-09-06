@@ -13,7 +13,7 @@ jobs:
       - run: npm ci
       - run: npm run start
   heroku-deploy:
-    if: success()
+    needs: [check-app]
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
