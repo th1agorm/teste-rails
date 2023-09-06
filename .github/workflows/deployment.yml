@@ -11,19 +11,24 @@ on:
       - dev
 
 jobs:
-  heroku-deploy:
+  heroku-deploy-main:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
-    if: github.ref == 'refs/heads/main'
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.14
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_STAGING }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
+  heroku-deploy-dev:
     if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.14
       with:
@@ -31,7 +36,7 @@ jobs:
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_DEV }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
   send-slack-message:
-    needs: [heroku-deploy]
+    if: (needs.heroku-deploy-main == 'success' || needs.heroku-deploy-dev == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Post to a Slack channel
