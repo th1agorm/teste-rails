@@ -1,6 +1,9 @@
 name: Push Container to Heroku
 
 on:
+  push:
+    branches:
+      - dev
   pull_request_target:
     types: [closed]
     branches: 
@@ -41,7 +44,7 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
   heroku-deploy-dev:
-    if: (github.ref == 'refs/heads/dev')
+    if: (github.ref == 'refs/heads/dev') && (github.event_name == 'push')
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository
@@ -72,4 +75,35 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      
+  heroku-deploy-dev-merge:
+    if: (github.ref == 'refs/heads/dev') && (github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.14
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_DEV }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+    - name: Post to a Slack channel
+      id: slack
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
