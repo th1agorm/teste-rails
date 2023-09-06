@@ -13,17 +13,15 @@ on:
 jobs:
   heroku-deploy:
     runs-on: ubuntu-latest
-    env: 
-      HEROKU_APP_NAME: ''
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
     - name: Check enviroment to deploy
       run: |
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-          $HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_STAGING }}"
+          export HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_STAGING }}"
         else
-          $HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_DEV }}"
+          export HEROKU_APP_NAME = "${{ secrets.HEROKU_APP_NAME_DEV }}"
         fi
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.14
