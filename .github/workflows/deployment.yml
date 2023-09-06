@@ -7,13 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
+  send-slack-message:
+    needs: [heroku-deploy]
+    runs-on: ubuntu-latest
+    steps:
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
