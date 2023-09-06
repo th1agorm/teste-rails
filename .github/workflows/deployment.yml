@@ -9,6 +9,7 @@ on:
 
 jobs:
   heroku-deploy-main:
+    id: deploy-main
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -21,6 +22,7 @@ jobs:
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_STAGING }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
   heroku-deploy-dev:
+    id: deploy-dev
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
@@ -33,8 +35,8 @@ jobs:
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_DEV }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
   send-slack-message:
+    if: (steps.deploy-main.outcome == 'success' || steps.deploy-dev.outcome == 'success')
     runs-on: ubuntu-latest
-    if: success()
     steps:
       - name: Post to a Slack channel
         id: slack
