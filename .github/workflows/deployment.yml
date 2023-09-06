@@ -1,31 +1,39 @@
 name: Push Container to Heroku
 
-on: [push]
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - dev
 
 jobs:
-  check-app:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-      - run: npm ci
-      - run: npm run start
   heroku-deploy:
     needs: [check-app]
     runs-on: ubuntu-latest
+    if: github.ref == "refs/heads/main"
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.14
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+    - name: Check out repository
+      uses: actions/checkout@v4
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.14
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_STAGING }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+    if: github.ref == "refs/heads/dev"
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.14
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_DEV }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
   send-slack-message:
     needs: [heroku-deploy]
     runs-on: ubuntu-latest
