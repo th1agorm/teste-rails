@@ -14,19 +14,15 @@ jobs:
   heroku-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Check branch Master
-      if: github.ref == 'refs/heads/main'
-      env:
-        HEROKU_APP_NAME: teste-actions
-      run: echo "$HEROKU_APP_NAME"
-    - name: Check branch Dev
-      if: github.ref == 'refs/heads/dev'
-      env:
-        HEROKU_APP_NAME: teste-actions-dev
-      run: echo "$HEROKU_APP_NAME"
     - name: Check out repository
       uses: actions/checkout@v4
     - name: Deploy to Heroku
+      if: github.ref == 'refs/heads/main'
+      env:
+        HEROKU_APP_NAME: teste-actions
+      if: github.ref == 'refs/heads/dev'
+      env:
+        HEROKU_APP_NAME: teste-actions-dev
       uses: akhileshns/heroku-deploy@v3.12.14
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
