@@ -11,8 +11,7 @@ on:
       - dev
 
 jobs:
-  heroku-deploy:
-    needs: [check-app]
+  heroku-deploy-main:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
@@ -24,6 +23,8 @@ jobs:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_STAGING }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
+    heroku-deploy-dev:
+    runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/dev' }}
     steps:
     - name: Check out repository
