@@ -5,6 +5,10 @@ on:
     branches:
       - dev
   pull_request_target:
+    types: [synchronize]
+    branches:
+      - main
+      - dev
 
 jobs:
   deploy:
