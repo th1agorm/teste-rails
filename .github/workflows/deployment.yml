@@ -5,7 +5,7 @@ on:
     branches:
       - dev
   pull_request_target:
-    types: [syncronized]
+    types: [closed]
     branches: 
       - main
       - dev
