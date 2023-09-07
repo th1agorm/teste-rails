@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME_STAGING }}" >> $GITHUB_ENV
       - name: Set env vars (dev)
-        if: endsWith(github.ref, '/dev')
+        if: endsWith(github.ref, '/dev') && github.event.pull_request.merged == true
         run: |
           echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME_DEV }}" >> $GITHUB_ENV
       - name: Check out repository
