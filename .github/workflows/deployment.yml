@@ -14,10 +14,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Teste
-        run: |
-          echo "event name is:" ${{ github.event_name }} 
-          echo "event type is:" ${{ github.event.action }} 
       - name: Set env vars (prod)
         if: endsWith(github.ref, '/main')
         run: |
@@ -28,6 +24,8 @@ jobs:
           echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME_DEV }}" >> $GITHUB_ENV
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Run Heroku Functions action
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
