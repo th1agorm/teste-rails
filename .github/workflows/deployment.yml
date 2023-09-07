@@ -14,6 +14,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Teste
+        run: |
+          echo "event name is:" ${{ github.event_name }} 
+          echo "event type is:" ${{ github.event.action }} 
       - name: Set env vars (prod)
         if: endsWith(github.ref, '/main')
         run: |
