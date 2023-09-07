@@ -5,10 +5,6 @@ on:
     branches:
       - dev
   pull_request_target:
-    types: [syncronized]
-    branches: 
-      - main
-      - dev
 
 jobs:
   heroku-deploy-main:
