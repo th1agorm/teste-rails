@@ -6,5 +6,5 @@ jobs:
     steps:
       - name: Output Github Env
         env:
-          TESTE='Teste Env'
+          TESTE=Teste_ENV
         run: echo "${{ env.TESTE }}"
