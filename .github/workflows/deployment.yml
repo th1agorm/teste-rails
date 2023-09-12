@@ -3,8 +3,6 @@ on: workflow_dispatch
 jobs: 
   info:
     runs-on: ubuntu-latest
-    env:
-      TESTE: Teste_Env
     steps:
       - name: Output Github Env
         run: echo "${{ vars.TESTE }}"
