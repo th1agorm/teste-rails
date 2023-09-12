@@ -7,4 +7,4 @@ jobs:
       TESTE: Teste_Env
     steps:
       - name: Output Github Env
-        run: echo "${{ env.TESTE }}"
+        run: echo "${{ vars.TESTE }}"
