@@ -4,7 +4,7 @@ jobs:
   info:
     runs-on: ubuntu-latest
     env:
-      TESTE=Teste_ENV
+      TESTE: Teste_Env
     steps:
       - name: Output Github Env
         run: echo "${{ env.TESTE }}"
