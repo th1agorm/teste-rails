@@ -20,11 +20,11 @@ jobs:
           echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME_DEV }}" >> $GITHUB_ENV
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - name: Run Heroku Functions action
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ env.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        env:
+          HD_RANDOM_DATA: "Teste Random Data Production"
