@@ -27,4 +27,4 @@ jobs:
           heroku_app_name: ${{ env.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
         env:
-          HD_RANDOM_DATA: "Teste Random Data Production"
+          HD_TESTE_HOME: "Teste Random Data Production"
